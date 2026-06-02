@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+# vim: set syntax=yaml ts=2 sw=2 sts=2 et :
+
+user:
+  dom0:
+    - qubes-s2e-desk.clone
+
+  tpl-base-*:
+    - globbing: true
+    - common.term-base
+    - common.net-utils
+    - common.sys-utils
+    - common.emacs30
+    - common.file-management
+    - common.file-view-and-mod
+    - common.file-examine
+
+  tpl-desk-*:
+    - globbing: true
+    - common.firefox
+    - common.gnome-settings
+
+  tpl-studio-*:
+    - globbing: true
+    - common.tex
+    - common.design
+
+  tpl-wkspc-*:
+    - globbing: true
+    - common.tex
+    - common.timewarrior
