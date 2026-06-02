@@ -1,0 +1,17 @@
+# -*- coding: utf-8 -*-
+# vim: set syntax=yaml ts=2 sw=2 sts=2 et :
+
+# Compound matchers w/ pillar globs:
+# - https://docs.saltproject.io/en/master/topics/targeting/compound.html
+
+# Run on any app qube with the 'has-dotfiles' tag
+user:
+  'I@qubes:type:app and I@qubes:tags:has-dotfiles':
+    - match: compound
+    - qubes-s2e-dotfiles.install-appvm
+
+# Run on any app qube with the 'has-dotfiles' tag
+user:
+  'I@qubes:type:template and I@qubes:tags:has-dotfiles':
+    - match: compound
+    - qubes-s2e-dotfiles.install
