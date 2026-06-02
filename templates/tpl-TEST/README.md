@@ -19,8 +19,25 @@ Note: if you already have this version of the RPM installed this command will no
 
 `sudo dnf install /tmp/[RPM_FILENAME]`
 
-EXAMPLE: `sudo dnf install /tmp//tmp/tpl-TEST-0.0.1-1.fc41.noarch.rpm`
+EXAMPLE: `sudo dnf install /tmp/tpl-TEST.rpm`
 
+If you already installed it and its not a new version use reinstall **using the packages file path** in the dom0 terminal
+```shell_session
+[dom0]$ sudo dnf reinstall /tmp/tpl-TEST.rpm
+```
+
+**ISSUE WHEN REINSTALLING: "It didn't accept my changes to the rpm packages salt code?!!?"**
+You just need to delete the salt cache so it uses the updated salt files.
+```shell_session
+[dom0]$ rm -fr /var/cache/salt/minion/files/user/tpl-TEST
+```
+
+## Uninstalling
+Use DNF to uninstall the package **using its package name** using the dom0 terminal
+
+```shell_session
+[dom0]$ sudo dnf remove -v tpl-TEST
+```
 
 ### Debugging the Install
 
