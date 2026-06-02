@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# This file is part of s2e's qubes files.
+# Copyright ©2025 seamus tuohy, <code@seamustuohy.com>
+# Builds on qusal.MailFetch: 2023 - 2025 Benjamin Grande M. S. <ben.grande.b@gmail.com>
+## SPDX-License-Identifier: AGPL-3.0-or-later
+## https://github.com/ben-grande/qusal/blob/bcea67d353902c3cc649e7b029ecd48c78e90bd2/salt/mail/files/reader/rpc/qusal.MailFetch
+
+# For guidance on how it works see: https://github.com/holiman/qvm-sync/blob/4ee942c18366972983495028e5733dd5c42567a4/README.md?plain=1#L34
+set -x
+
+umask 077
+package_dir="${HOME}/"
+uid="$(id -u -- user)"
+
+# shellcheck disable=SC2174
+mkdir -p -- "${package_dir}"
+chmod -- 0700 "${package_dir}"
+
+qfile-unpacker "${uid}" "${package_dir}"
+
+rpmdev-setuptree
+cp rpmpackage/*.tar.gz ~/rpmbuild/SOURCES/.
+cp rpmpackage/*.spec ~/rpmbuild/SPECS/.
+cd ~/rpmbuild
+# rpmlint SPECS/${PACKAGE_NAME}.spec
+rpmbuild -ba SPECS/*.spec
+
+RPM_BUILD=$(ls ~/rpmbuild/RPMS/noarch/*.rpm)
+RPM_FILENAME=$(basename "${RPM_BUILD}")
+
+touch /tmp/ready_to_pull
+
+printf "\n============================================\n\n"
+printf "run the following command from the dom0 qube.\n"
+printf "\n"
+printf "$ qvm-run --pass-io ${HOSTNAME} 'cat ${RPM_BUILD}' > /tmp/${RPM_FILENAME}\n"
+printf "$ sudo dnf install /tmp/${RPM_FILENAME}\n"
+printf "\n"
+printf "Then exit the terminal that's about to open.\n"
+printf "\n============================================\n\n"
+
+qubes-run-terminal

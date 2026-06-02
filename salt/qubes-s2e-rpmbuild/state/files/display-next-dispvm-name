@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# Copyright ©2026 seamus tuohy, <code@seamustuohy.com>
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
+
+# Setup
+
+#Bash should terminate in case a command or chain of command finishes with a non-zero exit status.
+#Terminate the script in case an uninitialized variable is accessed.
+#See: https://github.com/azet/community_bash_style_guide#style-conventions
+set -e
+set -u
+set -o pipefail
+
+main() {
+    interval="${1:-0.2}"   # seconds between checks
+
+    # Build a set of currently-running DispVMs
+    # declare -A seen: creates a variable named seen as an associative array (a key value map) instead of a normal indexed array.
+    # Keys are strings, like VM names: disp1234.
+    # Values can be anything; here we just store 1 to mean "present".
+    declare -A seen=()
+
+    while IFS= read -r vm; do
+        [[ -n "$vm" ]] && seen["$vm"]=1
+    done < <(running_dispvms)
+
+    # Wait for the next new DispVM to start
+    while true; do
+        while IFS= read -r vm; do
+            [[ -z "$vm" ]] && continue
+            if [[ -z "${seen[$vm]+x}" ]]; then
+                printf '%s\n' "$vm"
+                exit 0
+            fi
+        done < <(running_dispvms)
+
+        sleep "$interval"
+    done
+}
+
+# Return running DispVM names (Qubes usually names them "disp####" or "disp-...")
+running_dispvms() {
+  qvm-ls --raw-list --running 2>/dev/null | grep -E '^disp([-[:alnum:]_]+)?$' || true
+}
+
+cleanup() {
+    # put cleanup needs here
+    exit 0
+}
+
+trap 'cleanup' EXIT
+
+main

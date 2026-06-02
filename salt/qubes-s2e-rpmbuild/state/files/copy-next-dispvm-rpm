@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+#
+# Copyright 2026 seamus tuohy, <code@seamustuohy.com>
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
+
+# Setup
+
+#Bash should terminate in case a command or chain of command finishes with a non-zero exit status.
+#See: https://github.com/azet/community_bash_style_guide#style-conventions
+set -e
+set -o pipefail
+
+readonly TMP_DIR=$(mktemp -d -t rpmbuilder-XXXXXX)
+
+main() {
+    PACKAGE_NAME="${1}"
+    interval="${2:-0.2}"   # seconds between checks
+
+    # Build a set of currently-running DispVMs
+    # declare -A seen: creates a variable named seen as an associative array (a key value map) instead of a normal indexed array.
+    # Keys are strings, like VM names: disp1234.
+    # Values can be anything; here we just store 1 to mean "present".
+    declare -A seen=()
+
+    while IFS= read -r vm; do
+        [[ -n "$vm" ]] && seen["$vm"]=1
+    done < <(running_dispvms)
+
+    # Wait for the next new DispVM to start
+    while true; do
+        while IFS= read -r vm; do
+            [[ -z "$vm" ]] && continue
+            if [[ -z "${seen[$vm]+x}" ]]; then
+                until (qvm-run "$vm" 'ls /tmp/ready_to_pull'); do
+                    # echo "DispVM $vm still building RPM..."
+                    sleep 1
+                done
+                # Copy the completed RPM to our
+                qvm-run --pass-io "${vm}" "cat /home/user/rpmbuild/RPMS/noarch/${PACKAGE_NAME}*" > "${TMP_DIR}/${PACKAGE_NAME}.rpm"
+                # Close dispvm once RPM is copied over
+                qvm-shutdown "${vm}"
+                echo "RPM package for ${PACKAGE_NAME} can be found at ${TMP_DIR}/${PACKAGE_NAME}.rpm"
+                exit 0
+            fi
+        done < <(running_dispvms)
+
+        sleep "$interval"
+    done
+}
+
+# Return running DispVM names (Qubes usually names them "disp####" or "disp-...")
+running_dispvms() {
+  qvm-ls --raw-list --running 2>/dev/null | grep -E '^disp([-[:alnum:]_]+)?$' || true
+}
+
+cleanup() {
+    # put cleanup needs here
+
+    # echo "Removing temporary RPM directory: ${TMP_DIR}"
+    # rm -fr "${TMP_DIR}"
+    exit 0
+}
+
+trap 'cleanup' EXIT
+
+# USAGE: (Basic) pass the name of the RPM package that is going to be built on a dispvm
+# > ./qvm-copy-next-dispvm-rpm RPM_PACKAGE_NAME
+# Specify the seconds between checks for a new DispVM
+# > ./qvm-copy-next-dispvm-rpm RPM_PACKAGE_NAME 2
+main "${1}" "${2}"

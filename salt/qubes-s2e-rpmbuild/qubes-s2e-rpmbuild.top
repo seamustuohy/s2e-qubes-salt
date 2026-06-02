@@ -1,0 +1,16 @@
+# -*- coding: utf-8 -*-
+# vim: set syntax=yaml ts=2 sw=2 sts=2 et :
+
+user:
+  dom0:
+    - qubes-s2e-rpmbuild.clone
+    - qubes-s2e-rpmbuild.dom0-helpers
+
+  tpl-rpmbuild:
+    - qubes-s2e-rpmbuild.install
+    - qubes-s2e-rpmbuild.rpc_service
+
+  # Match anything with the rpmdev tag. Only match templates.
+  'I@qubes:tags:rpmdev and I@qubes:type:template':
+    - match: compound
+    - qubes-s2e-rpmbuild.rpc_client

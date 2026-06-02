@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+#
+# Copyright 2026 seamus tuohy, <code@seamustuohy.com>
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the included LICENSE file for details.
+
+# Setup
+
+#Bash should terminate in case a command or chain of command finishes with a non-zero exit status.
+#Terminate the script in case an uninitialized variable is accessed.
+#See: https://github.com/azet/community_bash_style_guide#style-conventions
+set -e
+
+main() {
+    RPM_DIR="${1}"
+    FOUND_BUILDER=$(qvm-ls --fields NAME,CLASS --tags rpmdev | grep AppVM | cut -d ' ' -f 1)
+    BUILDER_NAME="${2}"
+     # `find` spec file. Extract info. -quit after first exec.
+    VERSION_NUM=$(qvm-run --pass-io "${BUILDER_NAME}" -- find "${RPM_DIR}" -type f -name "*.spec" -exec grep "Version:" {} \; -quit | cut -d : -f 2 | tr -d [:space:])
+    PACKAGE_NAME=$(qvm-run --pass-io "${BUILDER_NAME}" -- find "${RPM_DIR}" -type f -name "*.spec" -exec grep "Name:" {} \; -quit | cut -d : -f 2 | tr -d [:space:])
+    $(qvm-run --pass-io "${BUILDER_NAME}" -- send-rpmbuild "${RPM_DIR}" "${PACKAGE_NAME}" "${VERSION_NUM}") &
+    RPM_PATH=$(qvm-copy-next-dispvm-rpm "${PACKAGE_NAME}")
+    # echo "RPM copied over to: ${RPM_PATH}"
+    if dnf list installed "${PACKAGE_NAME}" >/dev/null 2>&1; then
+        echo "Re-installing: ${PACKAGE_NAME} from ${RPM_PATH}"
+        sudo dnf reinstall "${RPM_PATH}"
+    else
+        echo "Installing: ${PACKAGE_NAME} from ${RPM_PATH}"
+        sudo dnf install "${RPM_PATH}"
+    fi
+}
+
+cleanup() {
+    # put cleanup needs here
+    exit 0
+}
+
+trap 'cleanup' EXIT
+
+
+# USAGE:
+# > ./qvm-install-rpm-from-builder "RPM/PROJECT/FOLDER/PATH/qubes-s2e-NAME" "builder-appvm-name"
+# If you only have one properly tagged builder-appvm then you can run this without specifying the builder-appvm-name.
+# > ./qvm-install-rpm-from-builder "RPM/PROJECT/FOLDER/PATH/qubes-s2e-NAME"
+main "${1}" "${2}"

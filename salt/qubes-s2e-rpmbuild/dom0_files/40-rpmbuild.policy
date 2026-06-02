@@ -1,0 +1,8 @@
+# Opening a link in a disposable based on a non-default disposable template from a qube
+# https://github.com/QubesOS/qubes-translated/blob/master/es/_doc/user/how-to-guides/how-to-use-disposables.md#opening-a-link-in-a-disposable-based-on-a-non-default-disposable-template-from-a-qube
+
+## Note that policy parsing stops at the first match.
+
+## File format:
+## service-name|*       +argument|* source          destination                 action  [options]
+qubes.RpmBuild          *           @tag:rpmdev     @dispvm:rpmbuild-dispvm     allow
