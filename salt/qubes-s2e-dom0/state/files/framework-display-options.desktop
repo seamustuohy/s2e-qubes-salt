@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Extended Framework Display Options
+Comment=Extend available framework display options at startup
+Exec=/home/s2e/.bashrc.d/set_displays.sh
+Icon=system-run
+Terminal=false
+Type=Application

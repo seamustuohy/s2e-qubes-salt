@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+# vim: set syntax=yaml ts=2 sw=2 sts=2 et :
+
+user:
+  'dom0':
+    - qubes-s2e-dom0.setup_pillar
+    - qubes-s2e-dom0.framework
+    - qubes-s2e-dom0.scripts
+    - qubes-s2e-dom0.update_xfce_wm
+    - qubes-s2e-dom0.disk_trimming
+
+  'sys-net':
+    - qubes-s2e-dom0.networking

@@ -1,0 +1,5 @@
+
+qubes_get_pillar_items() {
+    TARGET="$1"
+    qubesctl --show-output --skip-dom0 --target="${TARGET}" pillar.items
+}

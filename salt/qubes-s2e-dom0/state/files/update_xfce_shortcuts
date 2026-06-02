@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+set -u
+set -o pipefail
+
+if [[ $EUID -eq 0 ]]; then
+   echo "This script should not be run as root; it must be run as a user with an active login session."
+   exit 1
+fi
+
+if ! [ -x "$(command -v xfconf-query)" ]; then
+  echo "Error: xfconf-query is not installed." >&2
+  exit 1
+fi
+
+# When using `xfconf-query` in salt files you need to be provide the current D-Bus session address via the `DBUS_SESSION_BUS_ADDRESS` environment variable to persist configuration changes.
+# When it is being run non-interactively it does not have direct access to D-Bus session address.
+# So we find the D-Bus address manually by grabbing it from the session running for the current gui user.
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER)/bus"
+
+
+# Set window tiling
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Super>Up' --type 'string' --set 'tile_up_key'
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Super>Down' --type 'string' --set 'tile_down_key'
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Super>Right' --type 'string' --set 'tile_right_key'
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Super>Left' --type 'string' --set 'tile_left_key'
+
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Shift><Super>Right' --type 'string' --set 'tile_up_right_key'
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Shift><Super>Left' --type 'string' --set 'tile_up_left_key'
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Primary><Super>Left' --type 'string' --set 'tile_down_left_key'
+xfconf-query --channel xfce4-keyboard-shortcuts --create --property '/xfwm4/custom/<Primary><Super>Right' --type 'string' --set 'tile_down_right_key'
