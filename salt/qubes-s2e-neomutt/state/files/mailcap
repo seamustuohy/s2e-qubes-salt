@@ -1,0 +1,17 @@
+## ~/.mailcap
+
+## Allow some type of media to be viewed.
+text/html; w3m -I %{charset} -dump -T text/html '%s' | cat -s; nametemplate=%s.html; edit=; copiousoutput; needsterminal; test=test -t 0
+text/plain; VISUAL="echo Editing prohibited\; sleep 2\; false" LESS="" less -- '%s'; edit=; needsterminal; test=test -t 0
+
+## qvm-open-in-vm $dispvm:<DVMTemplate> %u
+## The remaining media types are always opened in @dispvm.
+application/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+audio/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+font/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+example/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+image/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+message/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+model/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+multipart/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &
+video/*; echo "Opening file in DispVM" && qvm-open-in-dvm -- '%s' &

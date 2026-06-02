@@ -1,0 +1,7 @@
+# copy files from Neomutt VM's to cold storage.
+qubes.Filecopy *       @tag:neomutt-vm                   @tag:mail-cold-storage        allow
+# To add tags do the following
+# > qvm-tags [VM-NAME] add neomutt-vm
+
+# Allow named dispvm browser
+qubes.OpenUrl *       @tag:neomutt-vm                   dvm-neomutt-browser        allow

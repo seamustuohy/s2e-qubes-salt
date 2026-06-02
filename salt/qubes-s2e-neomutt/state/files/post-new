@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "ran afew new $(date)" > /tmp/last_afew.log
+/usr/bin/afew --tag --new >> /tmp/last_afew.log 2>&1
