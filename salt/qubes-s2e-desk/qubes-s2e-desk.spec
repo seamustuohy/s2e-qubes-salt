@@ -1,5 +1,5 @@
 Name:           qubes-s2e-desk
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        A Salt formula that <DOES A THING> in Qubes OS
 
@@ -117,5 +117,7 @@ if [ $1 -eq 1 ]; then
 fi
 
 %changelog
+* Wed Jun 03 2026 Seamus Tuohy <code@seamustuohy.com>
+- fixed emacs version used
 * Sun Oct 19 2025 Seamus Tuohy <code@seamustuohy.com>
 - Initial setup
