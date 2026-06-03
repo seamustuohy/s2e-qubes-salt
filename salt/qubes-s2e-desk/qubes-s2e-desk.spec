@@ -72,7 +72,7 @@ qubesctl state.apply qubes-s2e-desk.base_clone saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.term-base saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.net-utils  saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.sys-utils  saltenv=user -l debug
-qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.emacs30  saltenv=user -l debug
+qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.emacs  saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.file-management saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.file-view-and-mod saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-base-${VER} state.apply common.file-examine saltenv=user -l debug
