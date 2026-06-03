@@ -51,6 +51,7 @@ VER=$(qubesctl pillar.get os:template:base_version:debian --out=txt | awk '{prin
 qubesctl top.enable qubes-s2e-code
 
 qubesctl state.apply qubes-s2e-code.clone  saltenv=user -l debug
+qubesctl state.apply qubes-s2e-code.scripts  saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-code-${VER} state.apply common.python3-base-max saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-code-${VER} state.apply qubes-s2e-code.install saltenv=user -l debug
 
