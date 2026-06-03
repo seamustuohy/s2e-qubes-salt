@@ -151,6 +151,12 @@ You just need to delete the salt cache so it uses the updated salt files.
 [dom0]$ rm -fr /var/cache/salt/minion/files/user/qubes-s2e-NAME
 ```
 
+## See CPU/Mem usage across all qubes from the dom0 command line
+
+```shell_session
+[dom0]$ xentop -f
+```
+
 
 # LICENSE
 Copyright © 2024 Seamus Tuohy
