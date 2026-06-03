@@ -28,14 +28,41 @@ update-grub-config:
 
 {% endif %}
 
-# Remap Capslock if not already remapped
-{% set nocaps_set = salt['cmd.shell']("localectl status | grep -o 'ctrl:nocaps'") %}
-{% if nocaps_set  != 'ctrl:nocaps' %}
-# Use localectl to set the capslock key to control.
-dom0-baseline-setup-keyboard-nocaps:
-  cmd.run:
-    - name: 'localectl set-x11-keymap us pc105 ,query ctrl:nocaps'
-{% endif %}
+autostart-set-keymap-noctrl:
+  file.managed:
+    - name: /etc/xdg/autostart/nocaps-keyboard
+    - makedirs: True
+    - contents: |
+        [Desktop Entry]
+        Icon=input-keyboard
+        Name=No Caps 4 Keyboard
+        Categories=System
+        Exec=setxkbmap -option ctrl:nocaps
+        TryExec=setxkbmap
+        Terminal=false
+        Type=Application
+    - user: root
+    - group: root
+    - mode: 644
+
+autostart-set-keymap:
+  file.managed:
+    - name: /etc/xdg/autostart/framwork_display_set
+    - makedirs: True
+    - contents: |
+        [Desktop Entry]
+        Icon=preferences-desktop-screensaver
+        Name=Set Framework display settings
+        Categories=System
+        Exec=framwork_display_set
+        TryExec=framwork_display_set
+        Terminal=false
+        Type=Application
+    - user: root
+    - group: root
+    - mode: 644
+
+
 
 # Change the copy between qubes hotkey to the windows key
 config-qubes-use-windows-key-for-domain-copy-paste:
@@ -44,7 +71,6 @@ config-qubes-use-windows-key-for-domain-copy-paste:
     - set:
       - gui-default-secure-copy-sequence: 'Mod4-c'
       - gui-default-secure-paste-sequence: 'Mod4-v'
-
 
 ensure_touchpad_tapping_on_frameworks_unusable_touchpad:
   file.managed:

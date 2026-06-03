@@ -1,5 +1,5 @@
 Name:           qubes-s2e-dom0
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        A Salt formula that sets up dom0 in Qubes OS for s2e's devices
 
@@ -92,5 +92,7 @@ if [ $1 -eq 1 ]; then
 fi
 
 %changelog
+* Tue Jun 02 2026 Seamus Tuohy <code@seamustuohy.com>
+- Fixed autostart scripts
 * Sat Oct 25 2025 Seamus Tuohy <code@seamustuohy.com>
 - Initial setup
