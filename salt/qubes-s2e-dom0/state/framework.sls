@@ -10,7 +10,7 @@ dom0_add_framework_custom_display_modes:
     - replace: True
     - user: root
     - group: root
-    - mode: 755
+    - mode: 655
 
 {% if salt['cmd.shell']("cat /sys/power/mem_sleep") != 's2idle [deep]' %}
 configure-suspend-in-grub:
@@ -30,14 +30,14 @@ update-grub-config:
 
 autostart-set-keymap-noctrl:
   file.managed:
-    - name: /etc/xdg/autostart/nocaps-keyboard
+    - name: '/home/s2e/.config/autostart/nocaps-keyboard'
     - makedirs: True
     - contents: |
         [Desktop Entry]
         Icon=input-keyboard
         Name=No Caps 4 Keyboard
         Categories=System
-        Exec=setxkbmap -option ctrl:nocaps
+        Exec=setxkbmap -option ctrl:nocaps && setxkbmap -option caps:ctrl_modifier
         TryExec=setxkbmap
         Terminal=false
         Type=Application
@@ -45,23 +45,22 @@ autostart-set-keymap-noctrl:
     - group: root
     - mode: 644
 
-autostart-set-keymap:
-  file.managed:
-    - name: /etc/xdg/autostart/framwork_display_set
-    - makedirs: True
-    - contents: |
-        [Desktop Entry]
-        Icon=preferences-desktop-screensaver
-        Name=Set Framework display settings
-        Categories=System
-        Exec=framwork_display_set
-        TryExec=framwork_display_set
-        Terminal=false
-        Type=Application
-    - user: root
-    - group: root
-    - mode: 644
-
+# autostart-set-keymap:
+#   file.managed:
+#     - name: /etc/xdg/autostart/framwork_display_set
+#     - makedirs: True
+#     - contents: |
+#         [Desktop Entry]
+#         Icon=preferences-desktop-screensaver
+#         Name=Set Framework display settings
+#         Categories=System
+#         Exec=framwork_display_set
+#         TryExec=framwork_display_set
+#         Terminal=false
+#         Type=Application
+#     - user: root
+#     - group: root
+#     - mode: 644
 
 
 # Change the copy between qubes hotkey to the windows key

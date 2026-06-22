@@ -27,8 +27,8 @@ dom0_add_bashrc_scripts_brightness:
     - source: 'salt://qubes-s2e-dom0/files/bashrc/brightness.sh'
     - makedirs: True
     - replace: True
-    - user: root
-    - group: root
+    - user: s2e
+    - group: s2e
     - mode: 755
 
 {# # Run by /home/s2e/.config/autostart/framework-display-options.desktop #}
@@ -38,6 +38,6 @@ dom0_add_bashrc_scripts_framework_display:
     - source: 'salt://qubes-s2e-dom0/files/bashrc/set_displays.sh'
     - makedirs: True
     - replace: True
-    - user: root
-    - group: root
+    - user: s2e
+    - group: s2e
     - mode: 755
