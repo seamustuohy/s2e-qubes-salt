@@ -39,7 +39,7 @@ main() {
         echo "${NAME} is an AppVM"
         # add tag to allow appvm to use the builder
         echo "adding 'rpmdev' tag to allow appvm to use the builder"
-        qvm-tags "${TPL_NAME}" add rpmdev
+        qvm-tags "${NAME}" add rpmdev
         # Update template to install send-rpmbuild script
         TPL_NAME=$(qvm-ls "${NAME}" --fields TEMPLATE --raw-data)
         echo "Updating template ${TPL_NAME} to install send-rpmbuild script"
