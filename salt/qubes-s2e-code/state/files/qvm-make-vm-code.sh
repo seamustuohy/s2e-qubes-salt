@@ -33,22 +33,22 @@ main() {
                --template=tpl-code-${VER} \
                --prop=audiovm="" \
                --prop=netvm='sys-firewall' \
-               --prop=include-in-backups=false \
                --prop=memory=5000 \
                --prop=maxmem=5000 \
                --prop=label=green \
                --prop=vcpus=3
+    sudo qvm-prefs "${VMNAME}" include_in_backups false
     # Note: You don't need to enable top files to run them with salt.apply
     # Dotfiles
     sudo qvm-tags "${VMNAME}" add "has-dotfiles"
-    qubesctl --skip-dom0 --show-output --targets="${VMNAME}" state.apply qubes-s2e-dotfiles.install-appvm saltenv=user -l debug
+    sudo qubesctl --skip-dom0 --show-output --targets="${VMNAME}" state.apply qubes-s2e-dotfiles.install-appvm saltenv=user -l debug
     # python linters
-    qubesctl --skip-dom0 --targets=disp-py-code state.apply common.python_linters saltenv=user -l debug
+    sudo qubesctl --skip-dom0 --targets=disp-py-code state.apply common.python_linters saltenv=user -l debug
 }
 
 cleanup() {
     # put cleanup needs here
-    sudo qubesctl top.disable qubes-s2e-neomutt
+    sudo qubesctl top.disable qubes-s2e-code
     exit 0
 }
 
