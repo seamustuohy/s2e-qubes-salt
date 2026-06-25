@@ -92,6 +92,8 @@ if [ $1 -eq 1 ]; then
 fi
 
 %changelog
+* Wed Jun 24 2026 Seamus Tuohy <code@seamustuohy.com>
+- Further fixed autostart scripts
 * Tue Jun 02 2026 Seamus Tuohy <code@seamustuohy.com>
 - Fixed autostart scripts
 * Sat Oct 25 2025 Seamus Tuohy <code@seamustuohy.com>
