@@ -16,7 +16,7 @@ qubes-s2e-neomutt-appvm-cold-storage-cron:
   cron.present:
     - name: "/home/user/.mutt/scripts/store_transferred_in_cold_storage.sh > /tmp/CS_last_run.log 2>&1"
     - user: "user"
-    - minute: '*/5'
+    - minute: '*/3'
 
 {% endif %}
 {% endif %}

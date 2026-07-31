@@ -2,15 +2,25 @@
 # vim: set syntax=yaml ts=2 sw=2 sts=2 et :
 
 {# # Setup autostart for the set_displays.sh script needed to add zoomed displays to framework #}
-dom0_add_framework_custom_display_modes:
+
+/etc/X11/xorg.conf.d/10-monitor.conf:
   file.managed:
-    - name: '/home/s2e/.config/autostart/framework-display-options.desktop'
-    - source: 'salt://qubes-s2e-dom0/files/framework-display-options.desktop'
     - makedirs: True
-    - replace: True
-    - user: s2e
-    - group: s2e
-    - mode: 655
+    - contents: |
+        Section "Monitor"
+            Identifier "eDP-1"
+            Modeline "1368x912"  103.00  1368 1448 1592 1816  912 915 925 947 -hsync +vsync
+            Option "PreferredMode" "1368x912"
+        EndSection
+
+        Section "Screen"
+            Identifier "Screen0"
+            Device     "Card0"
+            Monitor    "eDP-1"
+            SubSection "Display"
+                Modes "1368x912"
+            EndSubSection
+        EndSection
 
 {% if salt['cmd.shell']("cat /sys/power/mem_sleep") != 's2idle [deep]' %}
 configure-suspend-in-grub:
@@ -27,22 +37,10 @@ update-grub-config:
       - configure-suspend-in-grub
 {% endif %}
 
-autostart-set-keymap-noctrl:
-  file.managed:
-    - name: '/home/s2e/.config/autostart/nocaps-keyboard.desktop'
-    - makedirs: True
-    - contents: |
-        [Desktop Entry]
-        Icon=input-keyboard
-        Name=No Caps 4 Keyboard
-        Categories=System
-        Exec=sh -c "/usr/bin/setxkbmap -option ctrl:nocaps ; /usr/bin/setxkbmap -option caps:ctrl_modifier"
-        TryExec=/usr/bin/setxkbmap
-        Terminal=false
-        Type=Application
-    - user: s2e
-    - group: s2e
-    - mode: 655
+config-dom0-set_caps_to_ctrl:
+  cmd.run:
+    - name: localectl set-x11-keymap us "" "" ctrl:nocaps
+    - unless: localectl status | grep -E "X11 Options:.*ctrl:nocaps"
 
 # Change the copy between qubes hotkey to the windows key
 config-qubes-use-windows-key-for-domain-copy-paste:
@@ -62,3 +60,6 @@ ensure_touchpad_tapping_on_frameworks_unusable_touchpad:
             MatchIsTouchpad "on"
             Option "Tapping" "on"
         EndSection
+    - user: root
+    - group: root
+    - mode: 644

@@ -1,11 +1,17 @@
 # Binaries that update
 salt/qubes-s2e-common/state/files/yt-dlp
 salt/qubes-s2e-common/state/files/inkstitch.deb
+salt/qubes-s2e-library/state/files/biblio.tar.gz
+salt/qubes-s2e-library/state/files/tmsu
+salt/qubes-s2e-library/state/files/tmsu/*
+salt/qubes-s2e-library/state/files/bash_completion.tmsu
+salt/qubes-s2e-library/state/files/replayweb.page
+salt/qubes-s2e-library/state/files/rga
+salt/qubes-s2e-library/state/files/rga/*
 
 # Keys that get updated
 salt/qubes-s2e-common/state/files/docker-key.gpg
 salt/qubes-s2e-common/state/files/packages.mozilla.org.asc
-
 
 
 # Byte-compiled / optimized / DLL files

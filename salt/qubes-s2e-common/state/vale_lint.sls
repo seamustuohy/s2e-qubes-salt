@@ -4,12 +4,9 @@
 include:
   - common.pip3
 
-common-install_python_linters:
+common-vale-lint-install-vale-pip:
   pip.installed:
     - names:
-      - "flake8"
-      - "pylint"
-      - "mypy"
       - "vale" # Linting for prose
     - bin_env: '/usr/local/bin/venv/bin/pip3'
     - ignore_installed: True
@@ -18,7 +15,7 @@ common-install_python_linters:
       - sls: common.pip3
 
 {# # Ensures that the pip directory is sourced with linters when the Emacs (GUI) is run #}
-install_linted_emacs_desktop_entry:
+common-vale-lint-_emacs_desktop_entry:
   file.managed:
     - name: /home/user/.local/share/applications/emacs.desktop
     - makedirs: True
@@ -40,3 +37,13 @@ install_linted_emacs_desktop_entry:
     - user: user
     - group: user
     - mode: 644
+
+common-vale-lint-install-vale:
+  cmd.run:
+    - name: "/usr/local/bin/venv/bin/vale"
+    - runas: user
+
+common-vale-lint-sync-vale-packages:
+  cmd.run:
+    - name: "/usr/local/bin/venv/bin/vale sync"
+    - runas: user

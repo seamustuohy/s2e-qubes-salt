@@ -47,6 +47,8 @@ update-binaries: assert-not-dom0 clean-binaries state/files/yt-dlp state/files/i
 clean-binaries:
 	rm -f state/files/yt-dlp
 	rm -f state/files/inkstitch.deb
+	rm -f state/files/deno.zip || true
+	rm -f state/files/deno  || true
 # rm -f state/files/docker-key.gpg
 # rm -f state/files/packages.mozilla.org.asc
 
@@ -63,6 +65,8 @@ state/files/inkstitch.deb:
 		| jq '.[] | select(select(.content_type == "application/x-debian-package") and select(.name | endswith("amd64.deb"))).browser_download_url' \
 		| xargs -n 1 curl -L -o 'state/files/inkstitch.deb'
 
+state/files/deno:
+	bin/deno_download.sh "${SALT_STATE_PATH}files"
 
 .PHONY: state install
 install: assert-not-dom0 state

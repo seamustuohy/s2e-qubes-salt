@@ -34,6 +34,19 @@
     - makedirs: True
     - user: {{ user }}
 
+{{ home }}/.config/vale directory:
+  file.directory:
+    - name: {{ home }}/.config/vale
+    - makedirs: True
+    - user: {{ user }}
+
+{{ home }}/.local/share/vale/styles directory:
+  file.directory:
+    - name: {{ home }}/.local/share/vale/styles
+    - makedirs: True
+    - user: {{ user }}
+
+
 # Ensure user can read all
 # setfacl format [u/g/o/m]:[name]:[rwx]
 # https://wiki.archlinux.org/title/Access_Control_Lists
@@ -108,4 +121,18 @@ qubes_s2e_dotfiles_link_fonts_to_local_share:
 qubes_s2e_dotfiles_update_font_cache:
   cmd.run:
     - name: fc-cache -f
+    - runas: {{ user }}
+
+# VALE
+qubes_s2e_dotfiles_link_vale_config:
+  cmd.run:
+    - name: ln -sfn "{{ dotfiles_path }}/etc/vale/.vale.ini" "{{ home }}/.config/vale/.vale.ini"
+    - runas: {{ user }}
+
+qubes_s2e_dotfiles_link_vale_styles:
+  cmd.run:
+    - name: |
+        find "{{ dotfiles_path }}/etc/vale/styles" -mindepth 1 -maxdepth 1 -type d | while read -r f; do
+          ln -sfn "$f" "{{ home }}/.local/share/vale/styles/$(basename "$f")"
+        done
     - runas: {{ user }}

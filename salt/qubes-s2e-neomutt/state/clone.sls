@@ -34,6 +34,13 @@ qubes-s2e-neomutt-cold_storage-template-numbered:
         - add:
             - mail-cold-storage-template
 
+## Tags don't take under clone for some reason
+qubes-s2e-neomutt_add_cold_storage_tpl_tags:
+    qvm.tags:
+        - name: tpl-qubes-s2e-neomutt-CS-{{ pillar["os"]["template"]["base_version"]["debian"] }}
+        - add:
+            - mail-cold-storage-template
+
 # === COLD STORAGE - APP VM ===
 qubes-s2e-neomutt_create_cold_storage:
   qvm.vm:
@@ -63,6 +70,12 @@ qubes-s2e-neomutt_create_cold_storage:
             - menu-items: "mutt.desktop qubes-run-terminal.desktop qubes-start.desktop"
             - default-menu-items: "mutt.desktop qubes-run-terminal.desktop qubes-start.desktop"
     - tags:
+        - add:
+            - mail-cold-storage
+
+qubes-s2e-neomutt_add_cold_storage_tags:
+    qvm.tags:
+        - name: mail-cold-storage
         - add:
             - mail-cold-storage
 

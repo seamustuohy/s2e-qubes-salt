@@ -90,13 +90,15 @@ qubesctl --skip-dom0 --targets=tpl-studio-${VER} state.apply common.tex saltenv=
 qubesctl --skip-dom0 --targets=tpl-studio-${VER} state.apply common.design saltenv=user -l debug
 
 # Work Desks
+qubesctl --skip-dom0 --targets=tpl-wkspc-${VER} state.apply common.media saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-wkspc-${VER} state.apply common.tex saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-wkspc-${VER} state.apply common.timewarrior saltenv=user -l debug
 qubesctl --skip-dom0 --targets=tpl-wkspc-${VER} state.apply common.python3-base-max saltenv=user -l debug
 
 # App VMs
 qubesctl --skip-dom0 --targets=work-desk state.apply common.python_linters saltenv=user -l debug
-qubesctl --skip-dom0 --targets=personal-desk state.apply common.python_linters saltenv=user -l debug
+qubesctl --skip-dom0 --targets=work-desk state.apply common.vale_lint saltenv=user -l debug
+qubesctl --skip-dom0 --targets=personal-desk state.apply common.vale_lint saltenv=user -l debug
 
 # This will fail until you first run libreoffice. So, you will need to run it again
 qubesctl --skip-dom0 --targets=work-desk state.apply common.libreoffice-appvm saltenv=user -l debug || true
