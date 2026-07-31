@@ -1,5 +1,5 @@
 Name:           qubes-s2e-common
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        A Salt formula that <DOES A THING> in Qubes OS
 
@@ -53,5 +53,7 @@ fi
 
 
 %changelog
+* Fri Jul 31 2026 Seamus Tuohy <code@seamustuohy.com>
+- Added Vale support
 * Sun Oct 19 2025 Seamus Tuohy <code@seamustuohy.com>
 - Initial setup

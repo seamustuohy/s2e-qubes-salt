@@ -47,7 +47,7 @@ main() {
                 qvm-run --pass-io "${vm}" "cat /home/user/rpmbuild/RPMS/noarch/${PACKAGE_NAME}*" > "${TMP_DIR}/${PACKAGE_NAME}.rpm"
                 # Close dispvm once RPM is copied over
                 qvm-shutdown "${vm}"
-                echo "RPM package for ${PACKAGE_NAME} can be found at ${TMP_DIR}/${PACKAGE_NAME}.rpm"
+                echo "${TMP_DIR}/${PACKAGE_NAME}.rpm"
                 exit 0
             fi
         done < <(running_dispvms)

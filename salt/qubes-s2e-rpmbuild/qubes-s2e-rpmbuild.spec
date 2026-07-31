@@ -1,5 +1,5 @@
 Name:           qubes-s2e-rpmbuild
-Version:        0.0.2
+Version:        0.0.3
 Release:        1%{?dist}
 Summary:        A Salt formula that creates a disposable VM for making RPM packages in Qubes OS
 
@@ -78,8 +78,9 @@ if [ $1 -eq 1 ]; then
 fi
 
 %changelog
+* Fri Jul 31 2026 Seamus Tuohy <code@seamustuohy.com>
+- Fixed upgrade/install failure to find rpm path
 * Tue May 26 2026 Seamus Tuohy <code@seamustuohy.com>
 - Add dom0 directed rpm building
-
 * Wed May 21 2025 Seamus Tuohy <code@seamustuohy.com>
 - Initial setup

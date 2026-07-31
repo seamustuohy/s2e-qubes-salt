@@ -1,5 +1,5 @@
 Name:           qubes-s2e-dotfiles
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        A Salt formula that <DOES A THING> in Qubes OS
 
@@ -107,5 +107,7 @@ if [ $1 -eq 1 ]; then
 fi
 
 %changelog
+* Fri Jul 31 2026 Seamus Tuohy <code@seamustuohy.com>
+- Added Vale support
 * Fri May 29 2026 Seamus Tuohy <code@seamustuohy.com>
 - Initial setup
