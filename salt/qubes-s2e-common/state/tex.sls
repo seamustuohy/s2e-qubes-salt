@@ -11,6 +11,7 @@ common-tex-install-base-packages:
       - texlive-fonts-extra
       - texlive-bibtex-extra
       - biber
+      - lacheck
 
 common-tex-add-texmf-d-custom-tex-config:
   file.managed:
