@@ -58,6 +58,8 @@ if [ $1 -eq 1 ]; then
         qubesctl --skip-dom0 --show-output --targets="${MAILVMS}" state.apply qubes-s2e-neomutt.configure saltenv=user #-l debug
         echo "Applying cron to mail AppVMs."
         qubesctl --skip-dom0 --show-output --targets="${MAILVMS}" state.apply qubes-s2e-neomutt.cron_appvm saltenv=user  #-l debug
+        echo "Adding vale to compose mail"
+        qubesctl --skip-dom0 --show-output --targets="${MAILVMS}" state.apply common.vale_lint saltenv=user #-l debug
     else
         echo "No existing mail AppVMs found. Not adding cron."
     fi
